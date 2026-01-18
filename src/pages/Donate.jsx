@@ -1,199 +1,167 @@
 // pages/Donate.jsx
 import React, { useState } from 'react';
-import { CreditCard, Banknote, Smartphone, Heart, Shield } from 'lucide-react';
+import { CreditCard, Banknote, Smartphone, CheckCircle2, ArrowRight, Heart } from 'lucide-react';
 
 const Donate = () => {
-  const [amount, setAmount] = useState(50);
+  const [amount, setAmount] = useState(100);
+  const [customAmount, setCustomAmount] = useState('');
   const [donationType, setDonationType] = useState('one-time');
-  const [selectedProject, setSelectedProject] = useState('general');
 
   const presetAmounts = [25, 50, 100, 250, 500];
-  const projects = [
-    { id: 'general', name: 'Where Most Needed', description: 'Let us allocate to urgent needs' },
-    { id: 'water', name: 'Clean Water Project', description: 'Build wells and water systems' },
-    { id: 'shelter', name: 'Safe Shelter Program', description: 'Construct homes for children' },
-    { id: 'food', name: 'Nutrition Program', description: 'Provide daily nutritious meals' },
-    { id: 'education', name: 'Education Fund', description: 'Build schools and provide supplies' }
-  ];
 
-  const paymentMethods = [
-    { id: 'card', name: 'Credit/Debit Card', icon: <CreditCard /> },
-    { id: 'paypal', name: 'PayPal', icon: <Banknote /> },
-    { id: 'mobile', name: 'Mobile Money', icon: <Smartphone /> }
-  ];
+  const handleAmountSelect = (val) => {
+    setAmount(val);
+    setCustomAmount('');
+  };
+
+  const handleCustomAmountChange = (e) => {
+    const val = e.target.value;
+    setCustomAmount(val);
+    setAmount(val ? parseInt(val) : 0);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Make a <span className="text-red-600">Difference</span> Today
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Your donation directly impacts children's lives across Africa
-          </p>
+    <div className="min-h-screen bg-white font-sans flex flex-col lg:flex-row">
+
+      {/* LEFT: Immersive Visuals (Sticky) */}
+      <div className="lg:w-1/2 bg-gray-900 relative lg:h-screen lg:sticky lg:top-0 overflow-hidden flex flex-col justify-end p-8 md:p-16 text-white">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"
+            alt="Hopeful child"
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/60 to-transparent"></div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Donation Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Donation Type</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    onClick={() => setDonationType('one-time')}
-                    className={`p-4 rounded-lg border-2 ${donationType === 'one-time' ? 'border-red-600 bg-red-50' : 'border-gray-200'}`}
-                  >
-                    <div className="font-semibold">One-Time Donation</div>
-                    <div className="text-sm text-gray-500">Make an immediate impact</div>
-                  </button>
-                  <button
-                    onClick={() => setDonationType('monthly')}
-                    className={`p-4 rounded-lg border-2 ${donationType === 'monthly' ? 'border-red-600 bg-red-50' : 'border-gray-200'}`}
-                  >
-                    <div className="font-semibold">Monthly Support</div>
-                    <div className="text-sm text-gray-500">Sustained change</div>
-                  </button>
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Select Amount</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
-                  {presetAmounts.map((preset) => (
-                    <button
-                      key={preset}
-                      onClick={() => setAmount(preset)}
-                      className={`p-4 rounded-lg border-2 ${amount === preset ? 'border-red-600 bg-red-600 text-white' : 'border-gray-200 hover:border-red-300'}`}
-                    >
-                      ${preset}
-                    </button>
-                  ))}
-                </div>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                  <input
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(parseInt(e.target.value) || 0)}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-600 focus:outline-none text-lg"
-                    min="1"
-                  />
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Select Project</h2>
-                <div className="space-y-3">
-                  {projects.map((project) => (
-                    <button
-                      key={project.id}
-                      onClick={() => setSelectedProject(project.id)}
-                      className={`w-full p-4 rounded-lg border-2 text-left ${selectedProject === project.id ? 'border-red-600 bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}
-                    >
-                      <div className="font-semibold">{project.name}</div>
-                      <div className="text-sm text-gray-500">{project.description}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-                <div className="space-y-3">
-                  {paymentMethods.map((method) => (
-                    <button
-                      key={method.id}
-                      className="w-full p-4 rounded-lg border-2 border-gray-200 hover:border-red-300 flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="text-gray-600">{method.icon}</div>
-                        <span className="font-medium">{method.name}</span>
-                      </div>
-                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <button className="w-full bg-red-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-red-700 transition duration-300 flex items-center justify-center gap-2">
-                <Heart className="w-5 h-5" />
-                Donate ${amount} {donationType === 'monthly' ? 'Monthly' : 'Today'}
-              </button>
+        <div className="relative z-10 max-w-xl">
+          <div className="mb-8 hidden lg:block">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-widest text-red-400 mb-6">
+              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+              Urgent Need
             </div>
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">
+              Your Generosity <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-400">
+                Changes Lives.
+              </span>
+            </h1>
+            <p className="text-xl text-gray-300 leading-relaxed font-light">
+              100% of your donation funds life-saving capability. We provide water, shelter, and education to those who need it most.
+            </p>
           </div>
 
-          {/* Impact Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-gradient-to-b from-red-600 to-red-700 text-white rounded-2xl shadow-lg p-8 sticky top-8">
-              <h2 className="text-2xl font-bold mb-6">Your Impact</h2>
-              
-              <div className="space-y-6">
-                <div>
-                  <div className="text-4xl font-bold mb-2">${amount}</div>
-                  <div className="text-red-100">can provide:</div>
-                </div>
-
-                {amount >= 25 && (
-                  <div className="flex items-start gap-3">
-                    <div className="bg-white/20 p-2 rounded-lg">
-                      <Droplet className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-semibold">Clean Water</div>
-                      <div className="text-sm text-red-100">
-                        {Math.floor(amount / 25)} people access to clean water for a month
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {amount >= 15 && (
-                  <div className="flex items-start gap-3">
-                    <div className="bg-white/20 p-2 rounded-lg">
-                      <Utensils className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-semibold">Nutritious Food</div>
-                      <div className="text-sm text-red-100">
-                        {Math.floor(amount / 15)} children fed for a week
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {amount >= 50 && (
-                  <div className="flex items-start gap-3">
-                    <div className="bg-white/20 p-2 rounded-lg">
-                      <BookOpen className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-semibold">Education</div>
-                      <div className="text-sm text-red-100">
-                        School supplies for {Math.floor(amount / 50)} children
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-6 border-t border-white/20">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Shield className="w-5 h-5" />
-                    <span className="font-semibold">Your Donation is Secure</span>
-                  </div>
-                  <ul className="text-sm space-y-2 text-red-100">
-                    <li>• 100% secure payment processing</li>
-                    <li>• Tax-deductible receipt provided</li>
-                    <li>• 93% of funds go directly to programs</li>
-                    <li>• Regular impact reports sent to you</li>
-                  </ul>
-                </div>
+          {/* Live Impact Preview */}
+          <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 lg:p-8">
+            <span className="text-sm font-semibold text-gray-400 uppercase tracking-wide block mb-4">Your Impact Preview</span>
+            <div className="flex items-start gap-4">
+              <div className="text-5xl font-bold text-white">${amount || 0}</div>
+              <div className="pt-2 text-gray-300 leading-snug">
+                {amount < 50 && "Provides essential nutrition for a child for one month."}
+                {amount >= 50 && amount < 100 && "Supplies a student with books and school materials for a year."}
+                {amount >= 100 && amount < 500 && "Contributes to building a secure water well for an entire village."}
+                {amount >= 500 && "Funds a full scholarship and housing for a vulnerable student."}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* RIGHT: Interaction Area (Scrollable) */}
+      <div className="lg:w-1/2 bg-white flex flex-col justify-center p-8 md:p-16 lg:py-24">
+        <div className="max-w-lg mx-auto w-full">
+
+          {/* Intro for Mobile (hidden on desktop generally, but useful to keep context) */}
+          <div className="lg:hidden mb-10">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Make a Donation</h1>
+            <p className="text-gray-500">Secure, tax-deductible, and impactful.</p>
+          </div>
+
+          {/* Donation Type Tabs */}
+          <div className="flex p-1 bg-gray-100 rounded-2xl mb-12">
+            <button
+              onClick={() => setDonationType('one-time')}
+              className={`flex-1 py-4 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 ${donationType === 'one-time' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+              Give Once
+            </button>
+            <button
+              onClick={() => setDonationType('monthly')}
+              className={`flex-1 py-4 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 ${donationType === 'monthly' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+            >
+              Monthly <span className="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-[10px] ml-1">Most Popular</span>
+            </button>
+          </div>
+
+          {/* Amount Grid */}
+          <div className="mb-12">
+            <label className="block text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">Choose Amount</label>
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {presetAmounts.map((preset) => (
+                <button
+                  key={preset}
+                  onClick={() => handleAmountSelect(preset)}
+                  className={`py-4 rounded-xl border-2 font-bold text-lg transition-all duration-200 ${amount === preset && !customAmount
+                      ? 'border-red-600 bg-red-50 text-red-600'
+                      : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:text-gray-900'
+                    }`}
+                >
+                  ${preset}
+                </button>
+              ))}
+            </div>
+            <div className="relative">
+              <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-xl">$</span>
+              <input
+                type="number"
+                placeholder="Custom Amount"
+                value={customAmount}
+                onChange={handleCustomAmountChange}
+                className="w-full bg-gray-50 border-none rounded-2xl py-5 pl-12 pr-6 text-xl font-bold text-gray-900 placeholder:text-gray-300 focus:ring-2 focus:ring-red-500 transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Payment Method - Simple Selection */}
+          <div className="mb-12">
+            <label className="block text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">Payment Method</label>
+            <div className="space-y-3">
+              <button className="w-full flex items-center justify-between p-5 border border-gray-200 rounded-2xl hover:border-red-600 hover:bg-red-50/50 transition-all group">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-white transition-colors">
+                    <CreditCard size={20} className="text-gray-600 group-hover:text-red-600" />
+                  </div>
+                  <span className="font-bold text-gray-700 group-hover:text-gray-900">Card</span>
+                </div>
+                <div className="w-5 h-5 rounded-full border-2 border-gray-300 group-hover:border-red-600"></div>
+              </button>
+              <button className="w-full flex items-center justify-between p-5 border border-gray-200 rounded-2xl hover:border-red-600 hover:bg-red-50/50 transition-all group">
+                <div className="flex items-center gap-4">
+                  <div className="p-2 bg-gray-100 rounded-lg group-hover:bg-white transition-colors">
+                    <Banknote size={20} className="text-gray-600 group-hover:text-red-600" />
+                  </div>
+                  <span className="font-bold text-gray-700 group-hover:text-gray-900">PayPal</span>
+                </div>
+                <div className="w-5 h-5 rounded-full border-2 border-gray-300 group-hover:border-red-600"></div>
+              </button>
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <button className="w-full bg-gray-900 text-white py-6 rounded-2xl font-bold text-xl hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-gray-200 mb-6 flex items-center justify-center gap-3">
+            Donate ${amount || 0}
+            <ArrowRight size={24} />
+          </button>
+
+          <div className="flex items-center justify-center gap-2 text-gray-400 text-sm font-medium">
+            <CheckCircle2 size={16} className="text-green-500" />
+            Secure 256-bit SSL Encrytped
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 };
